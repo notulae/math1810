@@ -1,7 +1,7 @@
 {
-  "version": "v2026.27.0-rc1",
-  "url": "https://github.com/notulae/math1810/releases/download/v2026.27.0-rc1/math1810-v2026.27.0-rc1.zip",
-  "sha256": "b9e0fcdd268cc8bc203dc171912430d72e4a1ea90a2b23f21ecf446a81ced923",
+  "version": "v2026.27.0-rc2",
+  "url": "https://github.com/notulae/math1810/releases/download/v2026.27.0-rc2/math1810-v2026.27.0-rc2.zip",
+  "sha256": "465a5726bb10da9ddfd2accc516d537eac5b0ef76490be57f2d5ae6c3334c3c8",
   "bytes": 189667,
-  "built": "2026-09-16T10:55:45Z"
+  "built": "2026-09-16T10:59:09Z"
 }
