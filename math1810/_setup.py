@@ -170,6 +170,7 @@ from IPython.core.interactiveshell import InteractiveShell  # noqa: E402
 InteractiveShell.ast_node_interactivity = "all"
 
 import valres as vr  # noqa: E402
+vr.validate_live_config()  # fail clearly at startup if a switch was mistyped
 import numpy as np  # noqa: E402
 from scipy.integrate import odeint  # noqa: E402,F401
 import pylab  # noqa: E402,F401

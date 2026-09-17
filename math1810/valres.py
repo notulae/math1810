@@ -803,3 +803,104 @@ def genenc (OO00O0O000O000000 ,OO0OO0O0O0OO0000O ):#line:1410
     O000OOOOOOO000O00 ='#'+encrypt (O00O0O0OO000OO00O )+'#'#line:1418
     print ("Your encrypted message is: ",O000OOOOOOO000O00 )#line:1419
     return O000OOOOOOO000O00 #line:1420
+
+
+# Instructor live switches are in live_exercises.json, shipped with this file.
+# Keep the inherited exercise functions above unchanged.
+import functools as _functools
+import json as _json
+from pathlib import Path as _Path
+
+_LIVE_NAMES = tuple(f"a{i}" for i in range(1, 9))
+_LIVE_FILE = _Path(__file__).with_name("live_exercises.json")
+
+def _unique_pairs(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate exercise name: {key}")
+        result[key] = value
+    return result
+
+def _parse_live_config(text, source):
+    try:
+        switches = _json.loads(text, object_pairs_hook=_unique_pairs)
+        if not isinstance(switches, dict):
+            raise ValueError("expected a JSON object")
+        missing = sorted(set(_LIVE_NAMES) - set(switches))
+        extra = sorted(set(switches) - set(_LIVE_NAMES))
+        if missing or extra:
+            raise ValueError(f"missing {missing}; unknown {extra}")
+        if any(type(switches[name]) is not bool for name in _LIVE_NAMES):
+            raise ValueError("every exercise value must be true or false")
+        return switches
+    except ValueError as exc:
+        raise RuntimeError(f"Invalid live exercise configuration from {source}: {exc}") from exc
+
+def validate_live_config(path=None):
+    """Validate the bundled instructor template or an explicitly supplied file."""
+    source = _Path(path) if path is not None else _LIVE_FILE
+    try:
+        return _parse_live_config(source.read_text(encoding="utf-8"), str(source))
+    except OSError as exc:
+        raise RuntimeError(f"Cannot read live exercise configuration in {source}: {exc}") from exc
+
+# A separate public branch can change this file without a student release.
+_LIVE_URL = "https://api.github.com/repos/notulae/math1810/contents/live_exercises.json?ref=live"
+_LIVE_REFRESH_SECONDS = 60
+_LIVE_STALE_SECONDS = 600
+_LIVE_CACHE = None
+_LIVE_FETCH_AT = 0.0
+_LIVE_GOOD_AT = 0.0
+_LIVE_FAILURE = ""
+
+def _current_live_config():
+    """Refresh at most once a minute; use only validated state within grace."""
+    global _LIVE_CACHE, _LIVE_FETCH_AT, _LIVE_GOOD_AT, _LIVE_FAILURE
+    import urllib.request as _request
+    import base64 as _base64
+    now = time.monotonic()
+    if not _LIVE_FETCH_AT or now - _LIVE_FETCH_AT >= _LIVE_REFRESH_SECONDS:
+        _LIVE_FETCH_AT = now
+        try:
+            # Use the same public API path checked by tools/live.py status.
+            # A unique query avoids local/shared reuse; propagation is not timed.
+            url = _LIVE_URL + "&check=" + str(time.time_ns())
+            request = _request.Request(url, headers={"Cache-Control": "no-cache",
+                                                     "Accept": "application/vnd.github+json"})
+            with _request.urlopen(request, timeout=4) as response:
+                payload = response.read(8193)
+            if len(payload) > 8192:
+                raise RuntimeError("configuration response exceeds 8192 bytes")
+            envelope = _json.loads(payload.decode("utf-8"))
+            if envelope.get("encoding") != "base64":
+                raise RuntimeError("unexpected configuration encoding")
+            data = _base64.b64decode("".join(envelope["content"].split()), validate=True)
+            if len(data) > 4096:
+                raise RuntimeError("configuration exceeds 4096 bytes")
+            switches = _parse_live_config(data.decode("utf-8"), _LIVE_URL)
+        except Exception as exc:
+            # A bad response never replaces the last validated switches.
+            _LIVE_FAILURE = f"Live exercise configuration unavailable or invalid: {exc}"
+        else:
+            _LIVE_CACHE, _LIVE_GOOD_AT, _LIVE_FAILURE = switches, now, ""
+    if _LIVE_CACHE is not None and now - _LIVE_GOOD_AT <= _LIVE_STALE_SECONDS:
+        return _LIVE_CACHE, _LIVE_FAILURE
+    return None, (_LIVE_FAILURE or "No recent valid live exercise configuration.")
+
+def _live_gate(name, function):
+    @_functools.wraps(function)
+    def gated(*args, **kwargs):
+        switches, failure = _current_live_config()
+        if switches is None:
+            print(failure or "Live exercise configuration unavailable.")
+            print("This CA test is not currently live.")
+            return None
+        if not switches[name]:
+            print("This CA test is not currently live.")
+            return None
+        return function(*args, **kwargs)
+    return gated
+
+for _name in _LIVE_NAMES:
+    globals()[_name] = _live_gate(_name, globals()[_name])
