@@ -14,6 +14,8 @@ runs in Google Colab. You need a Google account and nothing else.
 Nothing to download, and no GitHub account needed. The link opens the setup
 notebook directly in Colab.
 
+**Having trouble?** See the [MATH1810 getting-started and troubleshooting guide](TROUBLESHOOTING.md).
+
 ### Step 2. Run it
 
 Click the first cell, then press **Shift-Enter** to run each cell in turn — or
