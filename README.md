@@ -97,5 +97,5 @@ interrupted or corrupted update cannot damage a working installation.
 Run the setup notebook again. It repairs the course files without touching your
 work, and tells you what it changed.
 
-If a notebook still will not start, contact your lecturer through Brightspace and
-quote the exercise id printed when a notebook starts.
+If a notebook still will not start, see the
+[troubleshooting guide](TROUBLESHOOTING.md).

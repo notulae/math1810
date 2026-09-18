@@ -33,8 +33,8 @@ originals, not the copies where your work is saved.
   names. You need to allow Colab to access Drive for the course to install.
 - **The browser blocked a sign-in window.** Allow the Colab/Google sign-in
   window in your browser and retry. If your school account says an administrator
-  has blocked access, contact your school's IT support or the lecturer; repeated
-  clicks will not change an administrator setting.
+  has blocked access, repeated clicks will not change an administrator
+  setting; see **Still stuck?** below.
 - **The download failed or stopped.** Check your connection and run Course
   Setup again. It verifies the download before replacing course files. If you
   already had a working copy, a failed download leaves it in place.
@@ -75,7 +75,7 @@ wait before another attempt. Take your time rather than guessing. If a cell
 says **“This CA test is not currently live,”** it is not available now; wait
 for your lecturer's instructions. Reinstalling the course will not turn it on.
 If it says the live configuration is unavailable, check your connection and
-try again shortly. Tell your lecturer if the message continues.
+try again shortly. If the message continues, see **Still stuck?** below.
 
 ## Which code goes into Brightspace?
 
@@ -90,8 +90,7 @@ If you have a correct answer but cannot find a receipt, scroll through the
 output directly below the answer cell. Run the notebook's setup cell if you
 have started a new runtime, then return to the CA cell. If Brightspace rejects
 a receipt, check the CA entry and paste the full code again. If it still fails,
-contact the lecturer through Brightspace with the CA number and your exercise
-ID. Do not post your receipt publicly.
+see **Still stuck?** below. Keep your receipt private.
 
 ## Will running Course Setup again erase my work?
 
@@ -105,7 +104,4 @@ checked your work.
 
 ## Still stuck?
 
-Send the lecturer a Brightspace message saying which step or notebook failed,
-what you expected, and the exact error message or a screenshot. Include your
-six-digit exercise ID if the notebook printed it. **Do not send a password or
-post a CA receipt publicly.**
+Show me the issue in the next lab class.
